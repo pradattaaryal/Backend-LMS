@@ -3,6 +3,7 @@ using Application.Mapper;
 using Application.Repositories;
 using Application.Services;
 using Infrastructure.Data;
+using Infrastructure.Email;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -32,6 +33,8 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
 builder.Services.AddScoped<DatabaseConfig>();
+builder.Services.AddSingleton<Email>();
+builder.Services.AddHostedService<DailyEmailService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
