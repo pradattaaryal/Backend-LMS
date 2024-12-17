@@ -16,14 +16,17 @@ namespace Infrastructure.Email
 
         public async Task SendEmailAsync(string to, string subject, string body)
         {
-            var smtpClient = new SmtpClient(_configuration["Smtp:Host"])
+            using var smtpClient = new SmtpClient(_configuration["Smtp:Host"])
             {
                 Port = int.Parse(_configuration["Smtp:Port"]),
-                Credentials = new NetworkCredential(_configuration["Smtp:Username"], _configuration["Smtp:Password"]),
+                Credentials = new NetworkCredential(
+                    _configuration["Smtp:Username"],
+                    _configuration["Smtp:Password"]
+                ),
                 EnableSsl = true,
             };
 
-            var mailMessage = new MailMessage
+            using var mailMessage = new MailMessage
             {
                 From = new MailAddress(_configuration["Smtp:FromAddress"]),
                 Subject = subject,
@@ -32,7 +35,16 @@ namespace Infrastructure.Email
             };
             mailMessage.To.Add(to);
 
-            await smtpClient.SendMailAsync(mailMessage);
+            try
+            {
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details
+                throw new SmtpException("Failed to send email.", ex);
+            }
         }
+
     }
 }

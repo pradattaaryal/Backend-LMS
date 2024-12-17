@@ -36,9 +36,18 @@ namespace Presentation.Controllers
 
             return Ok(transaction);
         }
+        [HttpGet("student/{id}")]
+        public async Task<IActionResult> GetTransactionsByStudentId(int id)
+        {
+            var transactionn = await _mediator.Send(new GetTransactionsByStudentIdQuery { StudentId = id });
+            if (transactionn == null)
+                return NotFound(new { message = "Transaction not found" });
+
+            return Ok(transactionn);
+        }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTransaction([FromBody] TransactionDto transactionDto)
+        public async Task<IActionResult> CreateTransaction(TransactionDto transactionDto)
         {
             if (transactionDto == null)
                 return BadRequest(new { message = "Invalid transaction data" });
@@ -75,5 +84,19 @@ namespace Presentation.Controllers
 
             return NoContent();
         }
+        [HttpGet("book")]
+        public async Task<IActionResult> GetTransactionsByBookName([FromQuery] string bookName)
+        {
+            if (string.IsNullOrEmpty(bookName))
+                return BadRequest(new { message = "Book name cannot be empty" });
+
+            var transactions = await _mediator.Send(new GetTransactionsByBookNameQuery { BookName = bookName });
+
+            if (transactions == null || !transactions.Any())
+                return NotFound(new { message = "No transactions found for the specified book name" });
+
+            return Ok(transactions);
+        }
+
     }
 } 

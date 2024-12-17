@@ -29,18 +29,13 @@ namespace Application.Services
             return _mapper.Map<TransactionDto>(transactionEntity);
         }
 
-     /*   public async Task<IEnumerable<TransactionDto>> GetTransactionsByStudentIdAsync(int studentId)
-        {
-            var transactions = await _repository.GetTransactionsByStudentIdAsync(studentId);
-            return _mapper.Map<IEnumerable<TransactionDto>>(transactions);
-        }
-
-        public async Task<IEnumerable<TransactionDto>> GetTransactionsByUserIdAsync(int userId)
+       
+       /* public async Task<IEnumerable<TransactionDto>> GetTransactionsByUserIdAsync(int userId)
         {
             var transactions = await _repository.GetTransactionsByUserIdAsync(userId);
             return _mapper.Map<IEnumerable<TransactionDto>>(transactions);
         }
-     */
+      */
         public async Task<int> CreateTransactionAsync(TransactionDto transactionDto)
         {
             var transactionEntity = _mapper.Map<Transaction>(transactionDto);
@@ -57,5 +52,11 @@ namespace Application.Services
         {
             return await _repository.DeleteTransactionAsync(transactionId); // Return true if delete is successful
         }
+        public async Task<IEnumerable<TransactionDto>> GetTransactionsByBookNameAsync(string bookName)
+        {
+            var transactions = await _repository.GetTransactionsByBookNameAsync(bookName);
+            return _mapper.Map<IEnumerable<TransactionDto>>(transactions);
+        }
+
     }
 }

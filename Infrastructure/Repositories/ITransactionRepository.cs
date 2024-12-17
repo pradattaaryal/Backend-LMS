@@ -16,8 +16,9 @@ public interface ITransactionRepository
     Task<Transaction> GetTransactionByIdAsync(int transactionId);
  
     Task<IEnumerable<Transaction>> GetAllTransactionsAsync();
- 
-   /* Task<IEnumerable<Transaction>> GetTransactionsByStudentIdAsync(int studentId);
- 
-    Task<IEnumerable<Transaction>> GetTransactionsByUserIdAsync(int userId);*/
+
+    Task<IEnumerable<TransactionDto>> GetTransactionsByBookNameAsync(string bookName);
+
+
+    
 }

@@ -26,7 +26,7 @@ namespace Infrastructure.Email
             _logger = logger;
         }
 
-         public Task StartAsync(CancellationToken cancellationToken)
+        /* public Task StartAsync(CancellationToken cancellationToken)
           {
               _logger.LogInformation("Daily Email Service is starting.");
 
@@ -40,16 +40,16 @@ namespace Infrastructure.Email
 
               return Task.CompletedTask;
           }
-        /*
+        */
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Email Service is starting.");
 
             // Set the timer to execute every minute
-            _timer = new Timer(SendEmails, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            _timer = new Timer(SendEmails, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
 
             return Task.CompletedTask;
-        }*/
+        }
 
         private async void SendEmails(object state)
         {

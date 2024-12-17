@@ -25,4 +25,9 @@ namespace Presentation.CQRS.QueryHandler.TransactionQuery
     {
         public int UserId { get; set; }
     }
+    public class GetTransactionsByBookNameQuery : IRequest<IEnumerable<TransactionDto>>
+    {
+        public string BookName { get; set; }
+    }
+
 }

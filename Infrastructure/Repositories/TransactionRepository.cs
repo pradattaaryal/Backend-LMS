@@ -30,7 +30,7 @@ namespace Infrastructure.Data
                     commandType: CommandType.StoredProcedure);
             }
         }
-
+        
         public async Task<Transaction> GetTransactionByIdAsync(int transactionId)
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -104,5 +104,43 @@ namespace Infrastructure.Data
                 return rowsAffected > 0;
             }
         }
+
+        public async Task<IEnumerable<TransactionDto>> GetTransactionsByBookNameAsync(string bookName)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Flag", "ByBookName");
+                parameters.Add("@BookName", bookName);  // Passing the BookName parameter
+
+                // Call the new stored procedure for searching by BookName
+                var transactions = await connection.QueryAsync<Transaction>(
+                    "usp_ManageTransactions",  // Call the new procedure
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+
+                // Mapping Transaction to TransactionDto
+                return transactions.Select(transaction => new TransactionDto
+                {
+                    TransactionId = transaction.TransactionId,
+                    StudentId = transaction.StudentId,
+                    UserId = transaction.UserId,
+                    BookId = transaction.BookId,
+                    TransactionType = transaction.TransactionType,
+                    Date = transaction.Date,
+                    studentName = transaction.studentName,  // Ensure field matches stored procedure output
+                    LibarianName = transaction.LibarianName,  // Ensure field matches stored procedure output
+                    BookName = transaction.BookName          // Ensure field matches stored procedure output
+                });
+            }
+        }
+
+
+
+
+        /* public Task<IEnumerable<Transaction>> GetTransactionsByUserIdAsync(int userId)
+         {
+             throw new NotImplementedException();
+         }*/
     }
 }
